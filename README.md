@@ -1,2 +1,2 @@
 # Bala-Join
-Technical report and codes for Bala-Join test
+Technical report and codes for Bala-Join
