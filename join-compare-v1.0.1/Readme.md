@@ -1,42 +1,41 @@
-
-# 一、环境配置
-## grpc安装(集群依次安装)
+#Environment Configuration
+## Installation of grpc (Install sequentially across the cluster)
 ```
-# 配置环境变量（.bashrc)
+# Configure environment variables (.bashrc)
 echo "export MY_INSTALL_DIR=$HOME/.local" >> ~/.bashrc
 echo "export PATH="$MY_INSTALL_DIR/bin:$PATH"" >> ~/.bashrc
 
-# 创建安装目录
+# Create installation directory
 mkdir -p $MY_INSTALL_DIR
 
-# 安装cmake和相关库
+# Install cmake and related libraries
 sudo apt install -y build-essential autoconf libtool pkg-config
 
-# 解压grpc源码文件
+# Unzip the grpc source code file
 unzip grpc.zip
 
-# 编译并安装grpc到本地
+# Compile and install grpc locally
 cd grpc
 mkdir -p cmake/build
-pushd cmake/build
+cd cmake/build
 cmake -DgRPC_INSTALL=ON \
       -DgRPC_BUILD_TESTS=OFF \
       -DCMAKE_INSTALL_PREFIX=$MY_INSTALL_DIR \
       ../..
 make -j4
 make install
-popd
+cd ../../..
 ```
-详细参考https://grpc.io/docs/languages/cpp/quickstart/
+Refer to https://grpc.io/docs/languages/cpp/quickstart/ for more details.
 </br>
 </br>
 
-## pssh安装（主节点安装）
-pssh主要用来管理集群，该项目用到的功能：
-* 复制文件到所有集群
-* 集群执行某一个相同的命令
+## Installation of pssh (Install on the master node)
+pssh is mainly used to manage the cluster. The functionalities used in this project include:
+* Copying files to all the clusters
+* Executing a specific command across the cluster
 ```
-# 安装pssh包，使用简化命令
+# Install pssh package and use simplified commands
 sudo apt-get install pssh
 echo "alias pssh=parallel-ssh" >> ~/.bashrc && . ~/.bashrc
 echo "alias pscp=parallel-scp" >> ~/.bashrc && . ~/.bashrc
@@ -45,18 +44,16 @@ echo "alias pnuke=parallel-nuke" >> ~/.bashrc && . ~/.bashrc
 echo "alias pslurp=parallel-slurp" >> ~/.bashrc && . ~/.bashrc
 source ~/.bashrc
 
-# 检查安装
+# Check the installation
 pssh --version
 ```
 </br>
 
-## 集群配置（主节点配置）
-* cluster.txt内修改主机名，每行一个主机，尽量使用root用户
-* 免密配置
+## Cluster Configuration (Configure on the master node)
+* Modify the hostnames in cluster.txt, one host per line, and it is preferable to use the root user.
+* Configure passwordless access
 ```
 ssh-keygen
-ssh-copy-id root@hostname   # hostname为cluster.txt中的ip地址，重复执行该命令
+ssh-copy-id root@hostname   # Replace 'hostname' with the IP address from cluster.txt, and repeat this command.
 ```
 </br>
-
-
