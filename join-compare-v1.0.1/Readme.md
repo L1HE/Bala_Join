@@ -57,3 +57,20 @@ ssh-keygen
 ssh-copy-id root@hostname   # Replace 'hostname' with the IP address from cluster.txt, and repeat this command.
 ```
 </br>
+
+## Experimental Setup
+Modify the experimental configuration through join-compare.ini, including Hash Join configuration, skew detection configuration, and node configuration. Store the dataset in the resource folder, with the naming format as <number of nodes>_<small table volume>_<small table zipf factor>_<large table volume>_<large table zipf factor>, such as 24_5000_1.2_10000_1.2. Store the partitioned dataset (tables) in folders named after the node IDs, such as 24_5000_1.2_10000_1.2/0/big, 24_5000_1.2_10000_1.2/6/small.
+
+</br>
+
+## Run
+Start nodes other than the gateway node first.
+```
+./run.sh node1
+./run.sh node2
+```
+
+Start the gateway node after that, and note that the parameters must include all nodes to allow the gateway node to generate a distributed hash join plan.
+```
+./run.sh node0 node1 node2
+```
